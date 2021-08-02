@@ -97,7 +97,7 @@ class Config {
 	}
 
 	static websiteCommands() {
-		return ["Giochi", "Progetti", "Articoli", "News", "About Me", "Galador", "Erbi", "Hacksolo", " ", "Save", "Quittamelo"]
+		return ["Games", "Projects", "Articles", "News", "About Me", "TEMPLATE", "TEMPLATE", "TEMPLATE", " ", "Save", "Quit"]
 	}
 
 }
