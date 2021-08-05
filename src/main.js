@@ -283,44 +283,55 @@ class Info extends Base_Window {
 //###############################################################################
 
 class Status extends Base_Window {
-
+	static PARTY_DATA = [
+		["Luca", "LV", "HP", "MP", "1996-07-25", "665/  800", "121/  121"],
+		["Anna", "LV", "HP", "MP", "1996-11-13", "665/  800", "121/  121"],
+		["Ivano", "LV", "HP", "MP", "1995-07-06", "665/  800", "121/  121"],
+	]
+	
 	draw() {
-		this._mugshot = new PIXI.Sprite(parseTexture("mugshot"))
-		this.addChild(this._mugshot);
-		this._mugshot.scale.set(2)
-		this._mugshot.position.set(58,38)
-		let fontSize = 42;
-		this.drawText("Luca", this._mugshot.x + this._mugshot.width + 78, this._mugshot.y)
-		this.drawText("LV", this._mugshot.x + this._mugshot.width + 78, this._mugshot.y + this.lineHeight, fontSize, CYAN,"bold")
-		this.drawText("HP", this._mugshot.x + this._mugshot.width + 78, this._mugshot.y + this.lineHeight*2, fontSize, CYAN,"bold")
-		this.drawText("MP", this._mugshot.x + this._mugshot.width + 78, this._mugshot.y + this.lineHeight*3, fontSize, CYAN,"bold")
+		this._mugshots = [];
+		for(let i = 0; i < 3; i++) {
+			const mugshot = new PIXI.Sprite(parseTexture("mugshot"))
+			const data = Status.PARTY_DATA[i]
+			this.addChild(mugshot);
+			mugshot.scale.set(2)
+			mugshot.position.set(58,38 + ((this.lineHeight * 3) + 130) * i)
+			let fontSize = 42;
+			this.drawText(data[0], mugshot.x + mugshot.width + 78, mugshot.y)
+			this.drawText(data[1], mugshot.x + mugshot.width + 78, mugshot.y + this.lineHeight, fontSize, CYAN,"bold")
+			this.drawText(data[2], mugshot.x + mugshot.width + 78, mugshot.y + this.lineHeight*2, fontSize, CYAN,"bold")
+			this.drawText(data[3], mugshot.x + mugshot.width + 78, mugshot.y + this.lineHeight*3, fontSize, CYAN,"bold")
+	
+			const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10)
+	
+			let myAge = getAge(data[4]);
+			this.drawText(myAge, mugshot.x + mugshot.width + 140, mugshot.y + this.lineHeight, fontSize, WHITE,"bold")
+	
+			this.drawStatusBars(mugshot, fontSize, data);
 
-		const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10)
-
-		let myAge = getAge("1996-07-25");
-		this.drawText(myAge, this._mugshot.x + this._mugshot.width + 140, this._mugshot.y + this.lineHeight, fontSize, WHITE,"bold")
-
-		this.drawStatusBars(fontSize);
+			this._mugshots.push(mugshot)
+		}
 
 	}
 
-	drawStatusBars(fontSize) {
+	drawStatusBars(mugshot, fontSize, data) {
 		this._graphics = new PIXI.Graphics();
 		this.addChild(this._graphics)
 
 		let gw = Math.floor(this._width / 5)
-		this.drawText("665/  800", this._mugshot.x + this._mugshot.width + 78 + Math.floor(gw/2.1) + 5, (this._mugshot.y + this.lineHeight * 2) - 4, fontSize)
+		this.drawText(data[5], mugshot.x + mugshot.width + 78 + Math.floor(gw/2.1) + 5, (mugshot.y + this.lineHeight * 2) - 4, fontSize)
 		this._graphics.beginFill(0x000000);
 		let hpText = this.getText(5);
 		hpText.style.fontWeight = "bold"
-		this._graphics.drawRect(this._mugshot.x + this._mugshot.width + 78 + gw/4 + 5, (this._mugshot.y + this.lineHeight * 3) - 3, gw, 6);
+		this._graphics.drawRect(mugshot.x + mugshot.width + 78 + gw/4 + 5, (mugshot.y + this.lineHeight * 3) - 3, gw, 6);
 		this._graphics.endFill();
 
-		this.drawText("121/  121", this._mugshot.x + this._mugshot.width + 78 + Math.floor(gw/2.1) + 5, (this._mugshot.y + this.lineHeight * 3) - 4, fontSize)
+		this.drawText(data[6], mugshot.x + mugshot.width + 78 + Math.floor(gw/2.1) + 5, (mugshot.y + this.lineHeight * 3) - 4, fontSize)
 		this._graphics.beginFill(0x000000);
 		let mpText = this.getText(6);
 		mpText.style.fontWeight = "bold"
-		this._graphics.drawRect(this._mugshot.x + this._mugshot.width + 78 + gw/4 + 5, (this._mugshot.y + this.lineHeight * 4) - 3, gw, 6);
+		this._graphics.drawRect(mugshot.x + mugshot.width + 78 + gw/4 + 5, (mugshot.y + this.lineHeight * 4) - 3, gw, 6);
 		this._graphics.endFill();
 	}
 }
